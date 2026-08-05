@@ -1,0 +1,42 @@
+[project]
+name = "koe-kagami-backend"
+version = "0.1.0"
+description = "Koe-Kagami (声鏡) backend: AI-driven multi-agent simulation platform"
+requires-python = ">=3.13"
+dependencies = [
+    "tinytroupe",
+    "microsoft-agent-framework",
+    "fastapi",
+    "uvicorn[standard]",
+    "openai",
+    "azure-identity",
+]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "taskipy",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["agents", "core", "simulations"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.taskipy.tasks]
+setup = "uv sync"
+start = "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+lint = "ruff check . && ruff format --check ."
+format = "ruff format ."
